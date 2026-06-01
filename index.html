@@ -336,6 +336,7 @@
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -373,13 +374,13 @@
 <aside class="sidebar" id="sidebar">
 <div class="sidebar-header"><i class="fas fa-store"></i><h2>FreshMart</h2></div>
 <ul class="nav-menu">
-<li class="nav-item"><a class="nav-link active" data-page="dashboard"><i class="fas fa-chart-pie"></i><span>Dashboard</span></a></li>
+<li class="nav-item" data-role="admin" style="display:none;"><a class="nav-link active" data-page="dashboard"><i class="fas fa-chart-pie"></i><span>Dashboard</span></a></li>
 <li class="nav-item"><a class="nav-link" data-page="pos"><i class="fas fa-cash-register"></i><span>POS / Sell</span></a></li>
 <li class="nav-item"><a class="nav-link" data-page="products"><i class="fas fa-boxes"></i><span>Products</span></a></li>
 <li class="nav-item"><a class="nav-link" data-page="inventory"><i class="fas fa-warehouse"></i><span>Inventory</span></a></li>
 <li class="nav-item"><a class="nav-link" data-page="sales"><i class="fas fa-receipt"></i><span>Sales</span></a></li>
-<li class="nav-item"><a class="nav-link" data-page="reports"><i class="fas fa-chart-bar"></i><span>Reports</span></a></li>
-<li class="nav-item"><a class="nav-link" data-page="settings"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+<li class="nav-item" data-role="admin" style="display:none;"><a class="nav-link" data-page="reports"><i class="fas fa-chart-bar"></i><span>Reports</span></a></li>
+<li class="nav-item" data-role="admin" style="display:none;"><a class="nav-link" data-page="settings"><i class="fas fa-cog"></i><span>Settings</span></a></li>
 </ul>
 <div class="sidebar-footer"><div class="user-profile"><div class="user-avatar" id="userAvatar">A</div><div class="user-info"><h4 id="userName">Admin</h4><p id="userRole">Manager</p></div></div></div>
 </aside>
@@ -948,6 +949,25 @@ document.getElementById('dashboard').style.display='block';
 document.getElementById('userName').textContent=currentUser.name;
 document.getElementById('userRole').textContent=currentUser.role;
 document.getElementById('userAvatar').textContent=currentUser.name.charAt(0);
+
+// Role-based nav visibility
+document.querySelectorAll('[data-role="admin"]').forEach(el=>{
+el.style.display=currentUser.role==='Admin'?'list-item':'none';
+});
+
+// Cashier: redirect to POS, hide dashboard
+document.querySelectorAll('.page-section').forEach(x=>x.classList.remove('active'));
+document.querySelectorAll('.nav-link').forEach(x=>x.classList.remove('active'));
+if(currentUser.role==='Cashier'){
+document.getElementById('page-pos').classList.add('active');
+document.querySelector('[data-page="pos"]').classList.add('active');
+document.getElementById('pageTitle').textContent='Point of Sale';
+}else{
+document.getElementById('page-dashboard').classList.add('active');
+document.querySelector('[data-page="dashboard"]').classList.add('active');
+document.getElementById('pageTitle').textContent='Dashboard';
+}
+
 loadPOS();loadProducts();loadInventory();
 }else{
 const form=document.getElementById('loginForm');
@@ -1017,6 +1037,12 @@ if(link)link.click();
 // Navigation
 document.querySelectorAll('.nav-link').forEach(l=>{
 l.addEventListener('click',function(){
+// Prevent cashier from accessing admin-only pages
+const adminPages=['dashboard','reports','settings'];
+if(currentUser&&currentUser.role==='Cashier'&&adminPages.includes(this.dataset.page)){
+showToast('warning','Access Denied','Cashier cannot access '+this.dataset.page);
+return;
+}
 document.querySelectorAll('.nav-link').forEach(x=>x.classList.remove('active'));this.classList.add('active');
 document.querySelectorAll('.page-section').forEach(x=>x.classList.remove('active'));
 document.getElementById('page-'+this.dataset.page).classList.add('active');
