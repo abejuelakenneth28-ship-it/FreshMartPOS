@@ -1079,7 +1079,88 @@ function updateQty(i,d){const item=cart[i],p=products.find(x=>x.id===item.id);if
 function removeItem(i){cart.splice(i,1);updateCart();showToast('success','Removed','Item removed');}
 document.getElementById('clearCart').addEventListener('click',function(){cart=[];updateCart();showToast('success','Cleared','Cart emptied');});
 document.getElementById('checkoutBtn').addEventListener('click',function(){if(cart.length===0){showToast('warning','Empty','Add items first');return;}const t=cart.reduce((a,b)=>a+(b.price*b.quantity),0);document.getElementById('paymentTotal').textContent='₱'+(t*1.12).toFixed(2);openModal('paymentModal');});
-document.getElementById('confirmPayment').addEventListener('click',function(){showToast('success','Paid!','Transaction complete');closeModal('paymentModal');cart=[];updateCart();});
+document.getElementById('confirmPayment').addEventListener('click',function(){
+if(cart.length===0){showToast('warning','Empty','No items to process');return;}
+
+const subtotal=cart.reduce((a,b)=>a+(b.price*b.quantity),0);
+const tax=subtotal*0.12;
+const total=subtotal+tax;
+const method=document.getElementById('paymentMethod').value;
+const amountInput=document.getElementById('amountReceived').value.trim();
+if(!amountInput||amountInput===''||isNaN(parseFloat(amountInput))){
+showToast('error','Invalid','Please enter the amount received');
+document.getElementById('amountReceived').focus();
+return;
+}
+const received=parseFloat(amountInput);
+const change=received-total;
+
+if(change<0){showToast('error','Insufficient','Amount received is less than total');return;}
+
+// Generate receipt ID
+const now=new Date();
+const receiptId='RCP-'+now.getFullYear()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+'-'+String(Math.floor(Math.random()*900)+100);
+
+// Build receipt items HTML
+const itemsHtml=cart.map(item=>{
+const lineTotal=item.price*item.quantity;
+return `<div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span>${item.emoji} ${item.name} x${item.quantity}</span><span>₱${lineTotal.toFixed(2)}</span></div>`;
+}).join('');
+
+// Fill receipt data
+document.getElementById('receiptId').textContent=receiptId;
+document.getElementById('receiptDate').textContent=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+document.getElementById('receiptTime').textContent=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+document.getElementById('receiptCashier').textContent=currentUser?currentUser.name:'Cashier';
+document.getElementById('receiptItems').innerHTML=itemsHtml;
+document.getElementById('receiptSubtotal').textContent='₱'+subtotal.toFixed(2);
+document.getElementById('receiptTax').textContent='₱'+tax.toFixed(2);
+document.getElementById('receiptTotal').textContent='₱'+total.toFixed(2);
+document.getElementById('receiptPaymentMethod').textContent=method;
+document.getElementById('receiptPaid').textContent='₱'+received.toFixed(2);
+document.getElementById('receiptChange').textContent='₱'+change.toFixed(2);
+
+// Save to sales history
+salesData.unshift({
+id:receiptId,
+date:now,
+cashier:currentUser?currentUser.name:'Cashier',
+items:cart.reduce((a,b)=>a+b.quantity,0),
+total:Math.round(total),
+payment:method
+});
+
+// Update dashboard stats (approximate)
+const todaySalesEl=document.querySelector('.stat-value');
+if(todaySalesEl&&document.getElementById('page-dashboard').classList.contains('active')){
+// Only update if on dashboard
+}
+
+showToast('success','Paid!','Transaction complete');
+closeModal('paymentModal');
+
+// Show receipt modal
+setTimeout(()=>{openModal('receiptModal');},300);
+
+cart=[];
+updateCart();
+document.getElementById('amountReceived').value='';
+});
+
+function printReceipt(){
+const receiptContent=document.getElementById('receiptContent').innerHTML;
+const printWindow=window.open('','_blank','width=400,height=600');
+printWindow.document.write(`
+<html><head><title>Receipt</title>
+<style>
+body{font-family:'Courier New',monospace;font-size:12px;padding:20px;color:#1e293b;}
+h2{font-family:'Poppins',sans-serif;font-size:16px;margin-bottom:5px;}
+</style></head><body>${receiptContent}</body></html>
+`);
+printWindow.document.close();
+printWindow.focus();
+setTimeout(()=>{printWindow.print();printWindow.close();},250);
+}
 
 // Products Table
 let deleteTargetId=null;
@@ -1231,5 +1312,70 @@ t.innerHTML=`<i class="fas ${type==='success'?'fa-check-circle':type==='error'?'
 c.appendChild(t);setTimeout(()=>t.remove(),3000);
 }
 </script>
+
+<!-- Receipt Modal -->
+<div class="modal-overlay" id="receiptModal">
+<div class="modal" style="max-width:380px;padding:0;overflow:hidden;">
+<div id="receiptContent" style="background:#fff;color:#1e293b;padding:1.5rem;font-family:'Courier New',monospace;font-size:0.8rem;line-height:1.6;">
+<div style="text-align:center;border-bottom:2px dashed #e2e8f0;padding-bottom:1rem;margin-bottom:1rem;">
+<h2 style="font-family:'Poppins',sans-serif;font-size:1.2rem;margin-bottom:0.3rem;color:#1e293b;">FreshMart POS</h2>
+<p style="color:#64748b;font-size:0.7rem;">Grocery Store</p>
+<p style="color:#64748b;font-size:0.7rem;margin-top:0.3rem;" id="receiptStoreAddr">Davao City</p>
+</div>
+<div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+<span style="color:#64748b;">Receipt #</span>
+<span style="font-weight:700;" id="receiptId">RCP-001</span>
+</div>
+<div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+<span style="color:#64748b;">Date</span>
+<span id="receiptDate">Jun 1, 2026</span>
+</div>
+<div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+<span style="color:#64748b;">Time</span>
+<span id="receiptTime">10:30 AM</span>
+</div>
+<div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+<span style="color:#64748b;">Cashier</span>
+<span id="receiptCashier">Admin</span>
+</div>
+<div style="border-top:1px dashed #e2e8f0;border-bottom:1px dashed #e2e8f0;padding:0.75rem 0;margin:0.75rem 0;">
+<div id="receiptItems"></div>
+</div>
+<div style="margin-bottom:0.4rem;display:flex;justify-content:space-between;">
+<span style="color:#64748b;">Subtotal</span>
+<span id="receiptSubtotal">₱0.00</span>
+</div>
+<div style="margin-bottom:0.4rem;display:flex;justify-content:space-between;">
+<span style="color:#64748b;">Tax (12%)</span>
+<span id="receiptTax">₱0.00</span>
+</div>
+<div style="display:flex;justify-content:space-between;font-weight:700;font-size:1rem;border-top:2px solid #1e293b;padding-top:0.5rem;margin-top:0.5rem;">
+<span>TOTAL</span>
+<span id="receiptTotal">₱0.00</span>
+</div>
+<div style="margin-top:0.75rem;display:flex;justify-content:space-between;">
+<span style="color:#64748b;">Payment</span>
+<span id="receiptPaymentMethod">Cash</span>
+</div>
+<div style="display:flex;justify-content:space-between;">
+<span style="color:#64748b;">Amount Paid</span>
+<span id="receiptPaid">₱0.00</span>
+</div>
+<div style="display:flex;justify-content:space-between;font-weight:700;color:#16a34a;">
+<span>Change</span>
+<span id="receiptChange">₱0.00</span>
+</div>
+<div style="text-align:center;margin-top:1.5rem;padding-top:1rem;border-top:2px dashed #e2e8f0;">
+<p style="font-size:0.75rem;color:#64748b;">Thank you for shopping!</p>
+<p style="font-size:0.7rem;color:#94a3b8;margin-top:0.2rem;">Please come again</p>
+</div>
+</div>
+<div style="padding:1rem;display:flex;gap:0.5rem;background:var(--light);border-top:1px solid var(--gray-light);">
+<button class="btn btn-outline" onclick="closeModal('receiptModal')" style="flex:1;"><i class="fas fa-times"></i> Close</button>
+<button class="btn btn-primary" onclick="printReceipt()" style="flex:1;"><i class="fas fa-print"></i> Print</button>
+</div>
+</div>
+</div>
+
 </body>
 </html>
