@@ -338,6 +338,7 @@
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -507,14 +508,204 @@
 
 <!-- Reports Page -->
 <div class="page-section" id="page-reports">
-<div class="content-section">
-<div class="section-header"><h2>Analytics</h2><button class="btn btn-primary" onclick="downloadReport()"><i class="fas fa-download"></i> Download</button></div>
-<div class="stats-grid">
-<div class="stat-card report-card" onclick="showReportDetail('revenue')" style="cursor:pointer;"><div class="stat-header"><div class="stat-icon green"><i class="fas fa-chart-line"></i></div></div><div class="stat-value">₱156,780</div><div class="stat-label">Monthly Revenue <i class="fas fa-arrow-right" style="font-size:0.7rem;color:var(--gray);margin-left:0.3rem;"></i></div></div>
-<div class="stat-card report-card" onclick="showReportDetail('customers')" style="cursor:pointer;"><div class="stat-header"><div class="stat-icon orange"><i class="fas fa-users"></i></div></div><div class="stat-value">342</div><div class="stat-label">Customers <i class="fas fa-arrow-right" style="font-size:0.7rem;color:var(--gray);margin-left:0.3rem;"></i></div></div>
-<div class="stat-card report-card" onclick="showReportDetail('items')" style="cursor:pointer;"><div class="stat-header"><div class="stat-icon blue"><i class="fas fa-shopping-basket"></i></div></div><div class="stat-value">1,056</div><div class="stat-label">Items Sold <i class="fas fa-arrow-right" style="font-size:0.7rem;color:var(--gray);margin-left:0.3rem;"></i></div></div>
-<div class="stat-card report-card" onclick="showReportDetail('profit')" style="cursor:pointer;"><div class="stat-header"><div class="stat-icon red"><i class="fas fa-percentage"></i></div></div><div class="stat-value">24.5%</div><div class="stat-label">Profit <i class="fas fa-arrow-right" style="font-size:0.7rem;color:var(--gray);margin-left:0.3rem;"></i></div></div>
+<div class="content-section" style="padding:0 2rem 1.5rem;">
+<div class="section-header">
+<h2><i class="fas fa-chart-bar" style="color:#3b82f6;margin-right:0.5rem;"></i>Analytics Dashboard</h2>
+<div style="display:flex;gap:0.5rem;">
+<button class="btn btn-outline" onclick="downloadReport()"><i class="fas fa-download"></i> Download Report</button>
 </div>
+</div>
+
+<!-- Top Stats Row -->
+<div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.5rem;">
+<div class="stat-card report-card"><div class="stat-header"><div class="stat-icon green"><i class="fas fa-chart-line"></i></div><span class="badge badge-success">+12.5%</span></div><div class="stat-value">₱156,780</div><div class="stat-label">Monthly Revenue</div></div>
+<div class="stat-card report-card"><div class="stat-header"><div class="stat-icon orange"><i class="fas fa-users"></i></div><span class="badge badge-success">+35%</span></div><div class="stat-value">342</div><div class="stat-label">Total Customers</div></div>
+<div class="stat-card report-card"><div class="stat-header"><div class="stat-icon blue"><i class="fas fa-shopping-basket"></i></div><span class="badge badge-success">+8.2%</span></div><div class="stat-value">1,056</div><div class="stat-label">Items Sold</div></div>
+<div class="stat-card report-card"><div class="stat-header"><div class="stat-icon red"><i class="fas fa-percentage"></i></div><span class="badge badge-warning">-2.1%</span></div><div class="stat-value">24.5%</div><div class="stat-label">Profit Margin</div></div>
+</div>
+
+<!-- Second Row: Revenue Breakdown + Customer Analytics -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.5rem;">
+<!-- Revenue Breakdown Card -->
+<div class="table-container" style="padding:1.5rem;">
+<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;">
+<div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#dbeafe,#bfdbfe);display:flex;align-items:center;justify-content:center;"><i class="fas fa-chart-pie" style="color:#3b82f6;"></i></div>
+<h3 style="font-size:1rem;color:var(--dark);">Revenue Breakdown</h3>
+</div>
+<div class="report-detail-item"><span class="report-detail-label">Gross Sales</span><span class="report-detail-value">₱198,450</span></div>
+<div class="report-detail-item"><span class="report-detail-label">Discounts Given</span><span class="report-detail-value" style="color:var(--danger)">-₱12,670</span></div>
+<div class="report-detail-item"><span class="report-detail-label">Returns</span><span class="report-detail-value" style="color:var(--danger)">-₱8,230</span></div>
+<div class="report-detail-item"><span class="report-detail-label">Tax Collected (12%)</span><span class="report-detail-value">₱21,230</span></div>
+<div class="report-detail-item" style="border-top:2px solid var(--gray-light);margin-top:0.5rem;padding-top:1rem;"><span class="report-detail-label" style="font-weight:700;color:var(--dark);">NET REVENUE</span><span class="report-detail-value" style="font-size:1.1rem;background:linear-gradient(135deg,#3b82f6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">₱156,780</span></div>
+<div style="margin-top:1rem;"><p style="font-size:0.75rem;color:var(--gray);margin-bottom:0.3rem;">Daily Average</p><div style="display:flex;align-items:center;gap:0.5rem;"><div class="report-chart-bar" style="width:75%;"></div><span style="font-size:0.8rem;font-weight:600;">₱5,226/day</span></div></div>
+</div>
+
+<!-- Customer Analytics Card -->
+<div class="table-container" style="padding:1.5rem;">
+<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;">
+<div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#fef3c7,#fde68a);display:flex;align-items:center;justify-content:center;"><i class="fas fa-users" style="color:#d97706;"></i></div>
+<h3 style="font-size:1rem;color:var(--dark);">Customer Analytics</h3>
+</div>
+<div class="report-detail-item"><span class="report-detail-label">New Customers</span><span class="report-detail-value">+89</span></div>
+<div class="report-detail-item"><span class="report-detail-label">Returning Customers</span><span class="report-detail-value">253</span></div>
+<div class="report-detail-item"><span class="report-detail-label">Average Order Value</span><span class="report-detail-value">₱458</span></div>
+<div class="report-detail-item"><span class="report-detail-label">Peak Hour</span><span class="report-detail-value">10:00 AM - 12:00 PM</span></div>
+<div class="report-detail-item" style="border-top:2px solid var(--gray-light);margin-top:0.5rem;padding-top:1rem;"><span class="report-detail-label" style="font-weight:700;color:var(--dark);">TOTAL CUSTOMERS</span><span class="report-detail-value" style="font-size:1.1rem;background:linear-gradient(135deg,#f97316,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">342</span></div>
+<div style="margin-top:1rem;"><p style="font-size:0.75rem;color:var(--gray);margin-bottom:0.3rem;">Customer Growth</p><div style="display:flex;align-items:center;gap:0.5rem;"><div class="report-chart-bar" style="width:60%;background:linear-gradient(90deg,#f97316,#fbbf24);"></div><span style="font-size:0.8rem;font-weight:600;color:#f97316;">+35% vs last month</span></div></div>
+</div>
+</div>
+
+<!-- Third Row: Items Sold + Profit Analysis -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.5rem;">
+<!-- Items Sold Card -->
+<div class="table-container" style="padding:1.5rem;">
+<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;">
+<div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#e0e7ff,#c7d2fe);display:flex;align-items:center;justify-content:center;"><i class="fas fa-shopping-basket" style="color:#6366f1;"></i></div>
+<h3 style="font-size:1rem;color:var(--dark);">Items Sold Breakdown</h3>
+</div>
+<div class="report-detail-item"><span class="report-detail-label">Fruits & Vegetables</span><span class="report-detail-value">412 items</span></div>
+<div class="report-detail-item"><span class="report-detail-label">Meat & Dairy</span><span class="report-detail-value">298 items</span></div>
+<div class="report-detail-item"><span class="report-detail-label">Beverages</span><span class="report-detail-value">187 items</span></div>
+<div class="report-detail-item"><span class="report-detail-label">Snacks & Others</span><span class="report-detail-value">159 items</span></div>
+<div class="report-detail-item" style="border-top:2px solid var(--gray-light);margin-top:0.5rem;padding-top:1rem;"><span class="report-detail-label" style="font-weight:700;color:var(--dark);">TOTAL ITEMS SOLD</span><span class="report-detail-value" style="font-size:1.1rem;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">1,056</span></div>
+<div style="margin-top:1rem;"><p style="font-size:0.75rem;color:var(--gray);margin-bottom:0.3rem;">Top Category: Fruits & Vegetables</p><div style="display:flex;align-items:center;gap:0.5rem;"><div class="report-chart-bar" style="width:39%;background:linear-gradient(90deg,#6366f1,#8b5cf6);"></div><span style="font-size:0.8rem;font-weight:600;color:#6366f1;">39% of sales</span></div></div>
+</div>
+
+<!-- Profit Analysis Card -->
+<div class="table-container" style="padding:1.5rem;">
+<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;">
+<div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#fce7f3,#fbcfe8);display:flex;align-items:center;justify-content:center;"><i class="fas fa-percentage" style="color:#ec4899;"></i></div>
+<h3 style="font-size:1rem;color:var(--dark);">Profit Analysis</h3>
+</div>
+<div class="report-detail-item"><span class="report-detail-label">Revenue</span><span class="report-detail-value">₱156,780</span></div>
+<div class="report-detail-item"><span class="report-detail-label">Cost of Goods</span><span class="report-detail-value" style="color:var(--danger)">-₱98,670</span></div>
+<div class="report-detail-item"><span class="report-detail-label">Operating Costs</span><span class="report-detail-value" style="color:var(--danger)">-₱19,890</span></div>
+<div class="report-detail-item"><span class="report-detail-label">Net Profit</span><span class="report-detail-value" style="color:var(--primary)">₱38,220</span></div>
+<div class="report-detail-item" style="border-top:2px solid var(--gray-light);margin-top:0.5rem;padding-top:1rem;"><span class="report-detail-label" style="font-weight:700;color:var(--dark);">PROFIT MARGIN</span><span class="report-detail-value" style="font-size:1.1rem;background:linear-gradient(135deg,#ec4899,#f43f5e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">24.5%</span></div>
+<div style="margin-top:1rem;"><p style="font-size:0.75rem;color:var(--gray);margin-bottom:0.3rem;">Target: 30%</p><div style="display:flex;align-items:center;gap:0.5rem;"><div class="report-chart-bar" style="width:82%;background:linear-gradient(90deg,#ec4899,#f43f5e);"></div><span style="font-size:0.8rem;font-weight:600;color:#ec4899;">82% of target</span></div></div>
+</div>
+</div>
+
+<!-- Fourth Row: Weekly Sales Trend + Top Selling Products -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.5rem;">
+<!-- Weekly Sales Trend -->
+<div class="table-container" style="padding:1.5rem;">
+<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;">
+<div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#dbeafe,#bfdbfe);display:flex;align-items:center;justify-content:center;"><i class="fas fa-chart-area" style="color:#3b82f6;"></i></div>
+<h3 style="font-size:1rem;color:var(--dark);">Weekly Sales Trend</h3>
+</div>
+<div style="display:flex;align-items:flex-end;gap:0.5rem;height:140px;padding-top:1rem;">
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;"><div style="width:100%;background:linear-gradient(180deg,#3b82f6,#06b6d4);border-radius:6px 6px 0 0;transition:height 0.5s ease;height:65%;"></div><span style="font-size:0.65rem;color:var(--gray);font-weight:500;">Mon</span><span style="font-size:0.6rem;color:#3b82f6;font-weight:600;">₱18.2k</span></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;"><div style="width:100%;background:linear-gradient(180deg,#3b82f6,#06b6d4);border-radius:6px 6px 0 0;transition:height 0.5s ease;height:82%;"></div><span style="font-size:0.65rem;color:var(--gray);font-weight:500;">Tue</span><span style="font-size:0.6rem;color:#3b82f6;font-weight:600;">₱22.8k</span></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;"><div style="width:100%;background:linear-gradient(180deg,#3b82f6,#06b6d4);border-radius:6px 6px 0 0;transition:height 0.5s ease;height:55%;"></div><span style="font-size:0.65rem;color:var(--gray);font-weight:500;">Wed</span><span style="font-size:0.6rem;color:#3b82f6;font-weight:600;">₱15.4k</span></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;"><div style="width:100%;background:linear-gradient(180deg,#3b82f6,#06b6d4);border-radius:6px 6px 0 0;transition:height 0.5s ease;height:95%;"></div><span style="font-size:0.65rem;color:var(--gray);font-weight:500;">Thu</span><span style="font-size:0.6rem;color:#3b82f6;font-weight:600;">₱26.1k</span></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;"><div style="width:100%;background:linear-gradient(180deg,#3b82f6,#06b6d4);border-radius:6px 6px 0 0;transition:height 0.5s ease;height:72%;"></div><span style="font-size:0.65rem;color:var(--gray);font-weight:500;">Fri</span><span style="font-size:0.6rem;color:#3b82f6;font-weight:600;">₱20.3k</span></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;"><div style="width:100%;background:linear-gradient(180deg,#3b82f6,#06b6d4);border-radius:6px 6px 0 0;transition:height 0.5s ease;height:100%;"></div><span style="font-size:0.65rem;color:var(--gray);font-weight:500;">Sat</span><span style="font-size:0.6rem;color:#3b82f6;font-weight:600;">₱28.5k</span></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;"><div style="width:100%;background:linear-gradient(180deg,#3b82f6,#06b6d4);border-radius:6px 6px 0 0;transition:height 0.5s ease;height:88%;"></div><span style="font-size:0.65rem;color:var(--gray);font-weight:500;">Sun</span><span style="font-size:0.6rem;color:#3b82f6;font-weight:600;">₱25.2k</span></div>
+</div>
+<div style="display:flex;justify-content:space-between;margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--gray-light);">
+<span style="font-size:0.75rem;color:var(--gray);">Total Weekly Sales</span>
+<span style="font-size:0.9rem;font-weight:700;color:var(--dark);">₱156,500</span>
+</div>
+</div>
+
+<!-- Top Selling Products -->
+<div class="table-container" style="padding:1.5rem;">
+<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;">
+<div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#dcfce7,#bbf7d0);display:flex;align-items:center;justify-content:center;"><i class="fas fa-trophy" style="color:#16a34a;"></i></div>
+<h3 style="font-size:1rem;color:var(--dark);">Top Selling Products</h3>
+</div>
+<div style="display:flex;flex-direction:column;gap:0.8rem;">
+<div style="display:flex;align-items:center;gap:0.75rem;"><span style="font-size:1.5rem;">🍎</span><div style="flex:1;"><div style="display:flex;justify-content:space-between;margin-bottom:0.2rem;"><span style="font-size:0.8rem;font-weight:600;color:var(--dark);">Fresh Apples</span><span style="font-size:0.75rem;font-weight:700;color:#3b82f6;">342 sold</span></div><div style="height:6px;background:var(--gray-light);border-radius:3px;overflow:hidden;"><div style="width:100%;height:100%;background:linear-gradient(90deg,#3b82f6,#06b6d4);border-radius:3px;"></div></div></div></div>
+<div style="display:flex;align-items:center;gap:0.75rem;"><span style="font-size:1.5rem;">🥛</span><div style="flex:1;"><div style="display:flex;justify-content:space-between;margin-bottom:0.2rem;"><span style="font-size:0.8rem;font-weight:600;color:var(--dark);">Fresh Milk</span><span style="font-size:0.75rem;font-weight:700;color:#3b82f6;">287 sold</span></div><div style="height:6px;background:var(--gray-light);border-radius:3px;overflow:hidden;"><div style="width:84%;height:100%;background:linear-gradient(90deg,#3b82f6,#06b6d4);border-radius:3px;"></div></div></div></div>
+<div style="display:flex;align-items:center;gap:0.75rem;"><span style="font-size:1.5rem;">🥤</span><div style="flex:1;"><div style="display:flex;justify-content:space-between;margin-bottom:0.2rem;"><span style="font-size:0.8rem;font-weight:600;color:var(--dark);">Coca-Cola</span><span style="font-size:0.75rem;font-weight:700;color:#3b82f6;">198 sold</span></div><div style="height:6px;background:var(--gray-light);border-radius:3px;overflow:hidden;"><div style="width:58%;height:100%;background:linear-gradient(90deg,#3b82f6,#06b6d4);border-radius:3px;"></div></div></div></div>
+<div style="display:flex;align-items:center;gap:0.75rem;"><span style="font-size:1.5rem;">🍗</span><div style="flex:1;"><div style="display:flex;justify-content:space-between;margin-bottom:0.2rem;"><span style="font-size:0.8rem;font-weight:600;color:var(--dark);">Chicken Breast</span><span style="font-size:0.75rem;font-weight:700;color:#3b82f6;">156 sold</span></div><div style="height:6px;background:var(--gray-light);border-radius:3px;overflow:hidden;"><div style="width:46%;height:100%;background:linear-gradient(90deg,#3b82f6,#06b6d4);border-radius:3px;"></div></div></div></div>
+<div style="display:flex;align-items:center;gap:0.75rem;"><span style="font-size:1.5rem;">🥕</span><div style="flex:1;"><div style="display:flex;justify-content:space-between;margin-bottom:0.2rem;"><span style="font-size:0.8rem;font-weight:600;color:var(--dark);">Carrots</span><span style="font-size:0.75rem;font-weight:700;color:#3b82f6;">124 sold</span></div><div style="height:6px;background:var(--gray-light);border-radius:3px;overflow:hidden;"><div style="width:36%;height:100%;background:linear-gradient(90deg,#3b82f6,#06b6d4);border-radius:3px;"></div></div></div></div>
+</div>
+</div>
+</div>
+
+<!-- Fifth Row: Payment Methods + Inventory Status -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.5rem;">
+<!-- Payment Methods -->
+<div class="table-container" style="padding:1.5rem;">
+<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;">
+<div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#fef3c7,#fde68a);display:flex;align-items:center;justify-content:center;"><i class="fas fa-wallet" style="color:#d97706;"></i></div>
+<h3 style="font-size:1rem;color:var(--dark);">Payment Methods</h3>
+</div>
+<div style="display:flex;flex-direction:column;gap:1rem;">
+<div>
+<div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span style="font-size:0.8rem;font-weight:600;color:var(--dark);"><i class="fas fa-money-bill-wave" style="color:#16a34a;margin-right:0.4rem;"></i>Cash</span><span style="font-size:0.8rem;font-weight:700;color:var(--dark);">₱78,390 (50%)</span></div>
+<div style="height:8px;background:var(--gray-light);border-radius:4px;overflow:hidden;"><div style="width:50%;height:100%;background:linear-gradient(90deg,#16a34a,#22c55e);border-radius:4px;"></div></div>
+</div>
+<div>
+<div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span style="font-size:0.8rem;font-weight:600;color:var(--dark);"><i class="fas fa-mobile-alt" style="color:#3b82f6;margin-right:0.4rem;"></i>GCash</span><span style="font-size:0.8rem;font-weight:700;color:var(--dark);">₱47,034 (30%)</span></div>
+<div style="height:8px;background:var(--gray-light);border-radius:4px;overflow:hidden;"><div style="width:30%;height:100%;background:linear-gradient(90deg,#3b82f6,#06b6d4);border-radius:4px;"></div></div>
+</div>
+<div>
+<div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span style="font-size:0.8rem;font-weight:600;color:var(--dark);"><i class="fas fa-credit-card" style="color:#6366f1;margin-right:0.4rem;"></i>Card</span><span style="font-size:0.8rem;font-weight:700;color:var(--dark);">₱31,356 (20%)</span></div>
+<div style="height:8px;background:var(--gray-light);border-radius:4px;overflow:hidden;"><div style="width:20%;height:100%;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:4px;"></div></div>
+</div>
+</div>
+<div style="display:flex;justify-content:space-between;margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--gray-light);">
+<span style="font-size:0.75rem;color:var(--gray);">Total Transactions</span>
+<span style="font-size:0.9rem;font-weight:700;color:var(--dark);">1,056</span>
+</div>
+</div>
+
+<!-- Inventory Status -->
+<div class="table-container" style="padding:1.5rem;">
+<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;">
+<div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#fee2e2,#fecaca);display:flex;align-items:center;justify-content:center;"><i class="fas fa-warehouse" style="color:#dc2626;"></i></div>
+<h3 style="font-size:1rem;color:var(--dark);">Inventory Status</h3>
+</div>
+<div style="display:flex;flex-direction:column;gap:1rem;">
+<div>
+<div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span style="font-size:0.8rem;font-weight:600;color:var(--dark);"><i class="fas fa-check-circle" style="color:#16a34a;margin-right:0.4rem;"></i>In Stock</span><span style="font-size:0.8rem;font-weight:700;color:#16a34a;">1,089 units (87%)</span></div>
+<div style="height:8px;background:var(--gray-light);border-radius:4px;overflow:hidden;"><div style="width:87%;height:100%;background:linear-gradient(90deg,#16a34a,#22c55e);border-radius:4px;"></div></div>
+</div>
+<div>
+<div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span style="font-size:0.8rem;font-weight:600;color:var(--dark);"><i class="fas fa-exclamation-triangle" style="color:#eab308;margin-right:0.4rem;"></i>Low Stock</span><span style="font-size:0.8rem;font-weight:700;color:#eab308;">108 units (9%)</span></div>
+<div style="height:8px;background:var(--gray-light);border-radius:4px;overflow:hidden;"><div style="width:9%;height:100%;background:linear-gradient(90deg,#eab308,#fbbf24);border-radius:4px;"></div></div>
+</div>
+<div>
+<div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><span style="font-size:0.8rem;font-weight:600;color:var(--dark);"><i class="fas fa-times-circle" style="color:#dc2626;margin-right:0.4rem;"></i>Critical</span><span style="font-size:0.8rem;font-weight:700;color:#dc2626;">50 units (4%)</span></div>
+<div style="height:8px;background:var(--gray-light);border-radius:4px;overflow:hidden;"><div style="width:4%;height:100%;background:linear-gradient(90deg,#dc2626,#ef4444);border-radius:4px;"></div></div>
+</div>
+</div>
+<div style="display:flex;justify-content:space-between;margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--gray-light);">
+<span style="font-size:0.75rem;color:var(--gray);">Total SKUs</span>
+<span style="font-size:0.9rem;font-weight:700;color:var(--dark);">1,247</span>
+</div>
+</div>
+</div>
+
+<!-- Bottom Row: Hourly Sales Heatmap -->
+<div class="table-container" style="padding:1.5rem;margin-bottom:1.5rem;">
+<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;">
+<div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#dbeafe,#bfdbfe);display:flex;align-items:center;justify-content:center;"><i class="fas fa-clock" style="color:#3b82f6;"></i></div>
+<h3 style="font-size:1rem;color:var(--dark);">Hourly Sales Heatmap</h3>
+</div>
+<div style="display:grid;grid-template-columns:repeat(12,1fr);gap:0.3rem;">
+<div style="text-align:center;padding:0.6rem 0.2rem;border-radius:6px;background:rgba(59,130,246,0.1);font-size:0.65rem;color:var(--gray);">8AM<br><strong style="color:var(--dark);font-size:0.7rem;">₱3.2k</strong></div>
+<div style="text-align:center;padding:0.6rem 0.2rem;border-radius:6px;background:rgba(59,130,246,0.2);font-size:0.65rem;color:var(--gray);">9AM<br><strong style="color:var(--dark);font-size:0.7rem;">₱5.8k</strong></div>
+<div style="text-align:center;padding:0.6rem 0.2rem;border-radius:6px;background:rgba(59,130,246,0.35);font-size:0.65rem;color:var(--gray);">10AM<br><strong style="color:var(--dark);font-size:0.7rem;">₱8.4k</strong></div>
+<div style="text-align:center;padding:0.6rem 0.2rem;border-radius:6px;background:rgba(59,130,246,0.5);font-size:0.65rem;color:var(--gray);">11AM<br><strong style="color:var(--dark);font-size:0.7rem;">₱12.1k</strong></div>
+<div style="text-align:center;padding:0.6rem 0.2rem;border-radius:6px;background:rgba(59,130,246,0.7);font-size:0.65rem;color:#fff;">12PM<br><strong style="font-size:0.7rem;">₱15.6k</strong></div>
+<div style="text-align:center;padding:0.6rem 0.2rem;border-radius:6px;background:rgba(59,130,246,0.6);font-size:0.65rem;color:#fff;">1PM<br><strong style="font-size:0.7rem;">₱13.2k</strong></div>
+<div style="text-align:center;padding:0.6rem 0.2rem;border-radius:6px;background:rgba(59,130,246,0.4);font-size:0.65rem;color:var(--gray);">2PM<br><strong style="color:var(--dark);font-size:0.7rem;">₱9.8k</strong></div>
+<div style="text-align:center;padding:0.6rem 0.2rem;border-radius:6px;background:rgba(59,130,246,0.25);font-size:0.65rem;color:var(--gray);">3PM<br><strong style="color:var(--dark);font-size:0.7rem;">₱6.5k</strong></div>
+<div style="text-align:center;padding:0.6rem 0.2rem;border-radius:6px;background:rgba(59,130,246,0.3);font-size:0.65rem;color:var(--gray);">4PM<br><strong style="color:var(--dark);font-size:0.7rem;">₱7.9k</strong></div>
+<div style="text-align:center;padding:0.6rem 0.2rem;border-radius:6px;background:rgba(59,130,246,0.55);font-size:0.65rem;color:var(--gray);">5PM<br><strong style="color:var(--dark);font-size:0.7rem;">₱11.4k</strong></div>
+<div style="text-align:center;padding:0.6rem 0.2rem;border-radius:6px;background:rgba(59,130,246,0.45);font-size:0.65rem;color:var(--gray);">6PM<br><strong style="color:var(--dark);font-size:0.7rem;">₱10.2k</strong></div>
+<div style="text-align:center;padding:0.6rem 0.2rem;border-radius:6px;background:rgba(59,130,246,0.15);font-size:0.65rem;color:var(--gray);">7PM<br><strong style="color:var(--dark);font-size:0.7rem;">₱4.1k</strong></div>
+</div>
+<div style="display:flex;justify-content:space-between;margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--gray-light);">
+<span style="font-size:0.75rem;color:var(--gray);">Peak Hour: 12:00 PM (₱15,600)</span>
+<span style="font-size:0.75rem;color:var(--gray);">Lowest: 8:00 AM (₱3,200)</span>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -829,60 +1020,9 @@ showToast('success','Exported','Inventory downloaded as CSV');
 
 // Report Details
 function showReportDetail(type){
-const title=document.getElementById('reportDetailTitle');
-const content=document.getElementById('reportDetailContent');
-
-const details={
-revenue:{
-title:'Monthly Revenue Breakdown',
-html:`
-<div class="report-detail-item"><span class="report-detail-label">Gross Sales</span><span class="report-detail-value">₱198,450</span></div>
-<div class="report-detail-item"><span class="report-detail-label">Discounts Given</span><span class="report-detail-value" style="color:var(--danger)">-₱12,670</span></div>
-<div class="report-detail-item"><span class="report-detail-label">Returns</span><span class="report-detail-value" style="color:var(--danger)">-₱8,230</span></div>
-<div class="report-detail-item"><span class="report-detail-label">Tax Collected (12%)</span><span class="report-detail-value">₱21,230</span></div>
-<div class="report-detail-item" style="border-top:2px solid var(--gray-light);margin-top:0.5rem;padding-top:1rem;"><span class="report-detail-label" style="font-weight:700;color:var(--dark);">NET REVENUE</span><span class="report-detail-value" style="font-size:1.1rem;background:linear-gradient(135deg,#3b82f6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">₱156,780</span></div>
-<div style="margin-top:1rem;"><p style="font-size:0.75rem;color:var(--gray);margin-bottom:0.3rem;">Daily Average</p><div style="display:flex;align-items:center;gap:0.5rem;"><div class="report-chart-bar" style="width:75%;"></div><span style="font-size:0.8rem;font-weight:600;">₱5,226/day</span></div></div>
-`
-},
-customers:{
-title:'Customer Analytics',
-html:`
-<div class="report-detail-item"><span class="report-detail-label">New Customers</span><span class="report-detail-value">+89</span></div>
-<div class="report-detail-item"><span class="report-detail-label">Returning Customers</span><span class="report-detail-value">253</span></div>
-<div class="report-detail-item"><span class="report-detail-label">Average Order Value</span><span class="report-detail-value">₱458</span></div>
-<div class="report-detail-item"><span class="report-detail-label">Peak Hour</span><span class="report-detail-value">10:00 AM - 12:00 PM</span></div>
-<div class="report-detail-item" style="border-top:2px solid var(--gray-light);margin-top:0.5rem;padding-top:1rem;"><span class="report-detail-label" style="font-weight:700;color:var(--dark);">TOTAL CUSTOMERS</span><span class="report-detail-value" style="font-size:1.1rem;background:linear-gradient(135deg,#f97316,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">342</span></div>
-<div style="margin-top:1rem;"><p style="font-size:0.75rem;color:var(--gray);margin-bottom:0.3rem;">Customer Growth</p><div style="display:flex;align-items:center;gap:0.5rem;"><div class="report-chart-bar" style="width:60%;background:linear-gradient(90deg,#f97316,#fbbf24);"></div><span style="font-size:0.8rem;font-weight:600;color:#f97316;">+35% vs last month</span></div></div>
-`
-},
-items:{
-title:'Items Sold Breakdown',
-html:`
-<div class="report-detail-item"><span class="report-detail-label">Fruits & Vegetables</span><span class="report-detail-value">412 items</span></div>
-<div class="report-detail-item"><span class="report-detail-label">Meat & Dairy</span><span class="report-detail-value">298 items</span></div>
-<div class="report-detail-item"><span class="report-detail-label">Beverages</span><span class="report-detail-value">187 items</span></div>
-<div class="report-detail-item"><span class="report-detail-label">Snacks & Others</span><span class="report-detail-value">159 items</span></div>
-<div class="report-detail-item" style="border-top:2px solid var(--gray-light);margin-top:0.5rem;padding-top:1rem;"><span class="report-detail-label" style="font-weight:700;color:var(--dark);">TOTAL ITEMS SOLD</span><span class="report-detail-value" style="font-size:1.1rem;background:linear-gradient(135deg,#6366f1,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">1,056</span></div>
-<div style="margin-top:1rem;"><p style="font-size:0.75rem;color:var(--gray);margin-bottom:0.3rem;">Top Category: Fruits & Vegetables</p><div style="display:flex;align-items:center;gap:0.5rem;"><div class="report-chart-bar" style="width:39%;background:linear-gradient(90deg,#6366f1,#8b5cf6);"></div><span style="font-size:0.8rem;font-weight:600;color:#6366f1;">39% of sales</span></div></div>
-`
-},
-profit:{
-title:'Profit Analysis',
-html:`
-<div class="report-detail-item"><span class="report-detail-label">Revenue</span><span class="report-detail-value">₱156,780</span></div>
-<div class="report-detail-item"><span class="report-detail-label">Cost of Goods</span><span class="report-detail-value" style="color:var(--danger)">-₱98,670</span></div>
-<div class="report-detail-item"><span class="report-detail-label">Operating Costs</span><span class="report-detail-value" style="color:var(--danger)">-₱19,890</span></div>
-<div class="report-detail-item"><span class="report-detail-label">Net Profit</span><span class="report-detail-value" style="color:var(--primary);">₱38,220</span></div>
-<div class="report-detail-item" style="border-top:2px solid var(--gray-light);margin-top:0.5rem;padding-top:1rem;"><span class="report-detail-label" style="font-weight:700;color:var(--dark);">PROFIT MARGIN</span><span class="report-detail-value" style="font-size:1.1rem;background:linear-gradient(135deg,#ec4899,#f43f5e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">24.5%</span></div>
-<div style="margin-top:1rem;"><p style="font-size:0.75rem;color:var(--gray);margin-bottom:0.3rem;">Target: 30%</p><div style="display:flex;align-items:center;gap:0.5rem;"><div class="report-chart-bar" style="width:82%;background:linear-gradient(90deg,#ec4899,#f43f5e);"></div><span style="font-size:0.8rem;font-weight:600;color:#ec4899;">82% of target</span></div></div>
-`
-}
-};
-
-const d=details[type];
-title.textContent=d.title;
-content.innerHTML=d.html;
-openModal('reportDetailModal');
+// All analytics are now displayed directly on the Reports page
+// This function is kept for backward compatibility but does nothing
+showToast('info','Analytics','All details are displayed on the dashboard below');
 }
 
 function downloadReport(){
