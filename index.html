@@ -364,6 +364,7 @@
 <base target="_blank">
 <base target="_blank">
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -469,10 +470,10 @@
 <div class="table-container">
 <table class="data-table">
 <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
-<tbody>
-<tr><td><strong>#ORD-001</strong></td><td>Juan Dela Cruz</td><td>5 items</td><td><strong>₱1,250</strong></td><td><span class="badge badge-success">Done</span></td><td><div class="action-btns"><button class="action-btn"><i class="fas fa-eye"></i></button><button class="action-btn"><i class="fas fa-print"></i></button></div></td></tr>
-<tr><td><strong>#ORD-002</strong></td><td>Maria Santos</td><td>3 items</td><td><strong>₱890</strong></td><td><span class="badge badge-warning">Processing</span></td><td><div class="action-btns"><button class="action-btn"><i class="fas fa-eye"></i></button><button class="action-btn"><i class="fas fa-print"></i></button></div></td></tr>
-<tr><td><strong>#ORD-003</strong></td><td>Pedro Reyes</td><td>8 items</td><td><strong>₱2,340</strong></td><td><span class="badge badge-success">Done</span></td><td><div class="action-btns"><button class="action-btn"><i class="fas fa-eye"></i></button><button class="action-btn"><i class="fas fa-print"></i></button></div></td></tr>
+<tbody id="dashboardOrdersTable">
+<tr><td><strong>#ORD-001</strong></td><td>Juan Dela Cruz</td><td>5 items</td><td><strong>₱1,250</strong></td><td><span class="badge badge-success">Done</span></td><td><div class="action-btns"><button class="action-btn" onclick="printOrder(1)" title="Print Order"><i class="fas fa-print"></i></button></div></td></tr>
+<tr><td><strong>#ORD-002</strong></td><td>Maria Santos</td><td>3 items</td><td><strong>₱890</strong></td><td><span class="badge badge-warning">Processing</span></td><td><div class="action-btns"><button class="action-btn" onclick="printOrder(2)" title="Print Order"><i class="fas fa-print"></i></button></div></td></tr>
+<tr><td><strong>#ORD-003</strong></td><td>Pedro Reyes</td><td>8 items</td><td><strong>₱2,340</strong></td><td><span class="badge badge-success">Done</span></td><td><div class="action-btns"><button class="action-btn" onclick="printOrder(3)" title="Print Order"><i class="fas fa-print"></i></button></div></td></tr>
 </tbody>
 </table>
 </div>
@@ -1321,7 +1322,20 @@ printWindow.document.write(`
 <style>
 body{font-family:'Courier New',monospace;font-size:12px;padding:20px;color:#1e293b;}
 h2{font-family:'Poppins',sans-serif;font-size:16px;margin-bottom:5px;}
-</style></head><body>${receiptContent}</body></html>
+</style></head><body>${receiptContent}
+<!-- Order Detail Modal -->
+<div class="modal-overlay" id="orderDetailModal">
+<div class="modal" style="max-width:450px;">
+<div class="modal-header"><h2 id="orderDetailTitle">Order Details</h2><button class="modal-close" onclick="closeModal('orderDetailModal')"><i class="fas fa-times"></i></button></div>
+<div id="orderDetailContent" style="padding:0.5rem 0;"></div>
+<div class="modal-actions" style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-light);">
+<button type="button" class="btn btn-outline" onclick="closeModal('orderDetailModal')">Close</button>
+<button type="button" class="btn btn-primary" id="orderDetailPrintBtn" onclick="printOrderFromModal()"><i class="fas fa-print"></i> Print</button>
+</div>
+</div>
+</div>
+
+</body></html>
 `);
 printWindow.document.close();
 printWindow.focus();
@@ -1477,6 +1491,95 @@ const t=document.createElement('div');t.className='toast '+type;
 t.innerHTML=`<i class="fas ${type==='success'?'fa-check-circle':type==='error'?'fa-times-circle':'fa-exclamation-circle'}"></i><div class="toast-content"><h4>${title}</h4><p>${msg}</p></div>`;
 c.appendChild(t);setTimeout(()=>t.remove(),3000);
 }
+
+// Dashboard Orders Data
+const dashboardOrders = [
+  {id:1,orderId:'ORD-001',customer:'Juan Dela Cruz',items:5,total:1250,status:'Done',date:'Jun 2, 2026',time:'10:30 AM',cashier:'Admin',payment:'Cash',products:[
+    {name:'Fresh Apples',qty:2,price:45,emoji:'🍎'},
+    {name:'Fresh Milk',qty:1,price:95,emoji:'🥛'},
+    {name:'Chicken Breast',qty:1,price:180,emoji:'🍗'},
+    {name:'Coca-Cola',qty:1,price:55,emoji:'🥤'},
+    {name:'Potato Chips',qty:1,price:35,emoji:'🥔'}
+  ]},
+  {id:2,orderId:'ORD-002',customer:'Maria Santos',items:3,total:890,status:'Processing',date:'Jun 2, 2026',time:'11:15 AM',cashier:'Cashier',payment:'GCash',products:[
+    {name:'Banana',qty:2,price:35,emoji:'🍌'},
+    {name:'Carrots',qty:1,price:25,emoji:'🥕'},
+    {name:'Detergent',qty:1,price:125,emoji:'🧼'}
+  ]},
+  {id:3,orderId:'ORD-003',customer:'Pedro Reyes',items:8,total:2340,status:'Done',date:'Jun 2, 2026',time:'09:45 AM',cashier:'Admin',payment:'Cash',products:[
+    {name:'Fresh Apples',qty:3,price:45,emoji:'🍎'},
+    {name:'Fresh Milk',qty:2,price:95,emoji:'🥛'},
+    {name:'Pork Liempo',qty:1,price:220,emoji:'🥩'},
+    {name:'Orange',qty:2,price:40,emoji:'🍊'}
+  ]}
+];
+
+// Print Individual Order
+function printOrder(orderId){
+  const order = dashboardOrders.find(o => o.id === orderId);
+  if(!order) return;
+
+  const subtotal = order.products.reduce((a,b) => a + (b.price * b.qty), 0);
+  const tax = subtotal * 0.12;
+
+  const itemsHtml = order.products.map(p => 
+    `<div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;font-size:12px;">
+      <span>${p.emoji} ${p.name} x${p.qty} @ ₱${p.price.toFixed(2)}</span>
+      <span>₱${(p.price * p.qty).toFixed(2)}</span>
+    </div>`
+  ).join('');
+
+  const printContent = `
+    <div style="font-family:'Courier New',monospace;font-size:12px;padding:20px;color:#1e293b;max-width:300px;margin:0 auto;">
+      <div style="text-align:center;border-bottom:2px dashed #ccc;padding-bottom:10px;margin-bottom:15px;">
+        <h2 style="font-size:16px;margin:0;">FreshMart POS</h2>
+        <p style="font-size:10px;color:#666;margin:3px 0;">Grocery Store</p>
+        <p style="font-size:10px;color:#666;">Davao City</p>
+      </div>
+      <div style="margin-bottom:5px;"><span style="color:#666;">Order:</span> <strong>#${order.orderId}</strong></div>
+      <div style="margin-bottom:5px;"><span style="color:#666;">Customer:</span> ${order.customer}</div>
+      <div style="margin-bottom:5px;"><span style="color:#666;">Date:</span> ${order.date}</div>
+      <div style="margin-bottom:5px;"><span style="color:#666;">Time:</span> ${order.time}</div>
+      <div style="margin-bottom:10px;"><span style="color:#666;">Cashier:</span> ${order.cashier}</div>
+      <div style="border-top:1px dashed #ccc;border-bottom:1px dashed #ccc;padding:10px 0;margin:10px 0;">
+        ${itemsHtml}
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:3px;font-size:12px;">
+        <span>Subtotal</span><span>₱${subtotal.toFixed(2)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:3px;font-size:12px;">
+        <span>Tax (12%)</span><span>₱${tax.toFixed(2)}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-weight:bold;font-size:14px;border-top:2px solid #333;padding-top:5px;margin-top:5px;">
+        <span>TOTAL</span><span>₱${order.total.toFixed(2)}</span>
+      </div>
+      <div style="margin-top:5px;font-size:11px;"><span style="color:#666;">Payment:</span> ${order.payment}</div>
+      <div style="text-align:center;margin-top:20px;padding-top:10px;border-top:2px dashed #ccc;">
+        <p style="font-size:10px;color:#666;">Thank you for shopping!</p>
+        <p style="font-size:9px;color:#999;">Please come again</p>
+      </div>
+    </div>
+  `;
+
+  const printWindow = window.open('', '_blank', 'width=400,height=600');
+  printWindow.document.write(`<html><head><title>Order #${order.orderId}</title></head><body>${printContent}</body></html>`);
+  printWindow.document.close();
+  printWindow.focus();
+  setTimeout(() => { printWindow.print(); printWindow.close(); }, 250);
+
+  showToast('success', 'Printed', 'Order #' + order.orderId + ' sent to printer');
+
+
+function printOrderFromModal(){
+  const title = document.getElementById('orderDetailTitle').textContent;
+  const orderId = parseInt(title.replace('Order #ORD-00', '').replace('Order #ORD-0', '').replace('Order #ORD-', ''));
+  if(!isNaN(orderId)){
+    printOrder(orderId);
+  }
+}
+
+}
+
 </script>
 
 <!-- Receipt Modal -->
